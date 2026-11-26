@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarsaMart (karsamart.id) — Web Toko UMKM, Kasir POS & Mini-CMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- HEADER & NAVBAR UTAMA -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+          KM
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg tracking-tight text-slate-900">KarsaMart</span>
+            <span class="hidden sm:inline-block text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              karsamart.id
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">Sistem Toko Online, Kasir POS & Manajemen Inventaris</p>
+        </div>
+      </div>
+
+      <!-- Status Role & Tombol Aksi -->
+      <div class="flex items-center gap-2.5">
+        <span id="role-badge" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+          Mode: Pembeli Publik
+        </span>
+
+        <button id="btn-open-cart" type="button" class="relative inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span class="hidden sm:inline">Keranjang</span>
+          <span id="cart-badge-count" class="px-1.5 py-0.5 text-xs font-bold rounded-full bg-white text-emerald-700">0</span>
+        </button>
+
+        <button id="btn-auth-action" type="button" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium transition">
+          <span id="btn-auth-label">Login Staff</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVIGASI MODUL (5 TAB) -->
+    <nav class="bg-slate-50/80 border-t border-slate-200 overflow-x-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 py-1.5" id="main-nav-tabs">
+        <button data-tab="store" class="nav-tab active-tab px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition">
+          Toko Online
+        </button>
+        <button data-tab="pos" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <span>Kasir / POS</span>
+          <span class="lock-icon text-xs" data-lock-for="pos">🔒</span>
+        </button>
+        <button data-tab="cms" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <span>CMS Produk & Stok</span>
+          <span class="lock-icon text-xs" data-lock-for="cms">🔒</span>
+        </button>
+        <button data-tab="dashboard" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <span>Laporan & Analitik</span>
+          <span class="lock-icon text-xs" data-lock-for="dashboard">🔒</span>
+        </button>
+        <button data-tab="database" class="nav-tab px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <span>Database & Keamanan</span>
+          <span class="lock-icon text-xs" data-lock-for="database">🔒</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- KONTEN UTAMA -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- =========================================================
+         MODUL 1: KATALOG TOKO ONLINE (PUBLIK)
+    ========================================================== -->
+    <section id="view-store" class="view-section space-y-6">
+      <!-- Banner Toko -->
+      <div class="rounded-2xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white p-6 sm:p-8 shadow-sm">
+        <div class="max-w-2xl space-y-2">
+          <span class="inline-block text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md bg-white/15">
+            Belanja Harian Praktis & Terjangkau
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Katalog Produk KarsaMart UMKM
+          </h1>
+          <p class="text-sm sm:text-base text-emerald-50">
+            Pilih kebutuhan pokok, minuman lokal, hingga camilan UMKM. Pesan langsung melalui pembayaran online atau kirim daftar pesanan ke WhatsApp toko.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Kategori & Pencarian -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div id="store-categories" class="flex flex-wrap items-center gap-2"></div>
+        <div class="relative w-full md:w-72">
+          <input id="store-search" type="text" placeholder="Cari nama produk atau SKU..." class="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Grid Produk -->
+      <div id="store-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+    </section>
+
+    <!-- =========================================================
+         MODUL 2: TERMINAL KASIR / POINT OF SALE (KASIR & ADMIN)
+    ========================================================== -->
+    <section id="view-pos" class="view-section hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Kiri: Daftar Barang Cepat -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <h2 class="font-bold text-base text-slate-900">Pilih Barang Transaksi</h2>
+              <input id="pos-search" type="text" placeholder="Scan SKU / cari barang..." class="w-full sm:w-64 px-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+            </div>
+            <div id="pos-categories" class="flex flex-wrap gap-1.5"></div>
+          </div>
+          <div id="pos-product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- Kanan: Struk & Pembayaran Kasir -->
+        <div class="lg:col-span-5">
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 sticky top-32">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h2 class="font-bold text-base text-slate-900">Keranjang Kasir (POS)</h2>
+                <p id="pos-cashier-info" class="text-xs text-slate-500">Kasir Aktif: -</p>
+              </div>
+              <button id="btn-pos-clear" type="button" class="text-xs font-medium text-rose-600 hover:underline">
+                Kosongkan
+              </button>
+            </div>
+
+            <!-- Item Belanja Kasir -->
+            <div id="pos-cart-items" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
+
+            <!-- Pengaturan Diskon & Pajak -->
+            <div class="border-t border-slate-100 pt-3 space-y-2.5 text-sm">
+              <div class="flex items-center justify-between">
+                <label for="pos-discount" class="text-slate-600">Diskon Transaksi (%)</label>
+                <input id="pos-discount" type="number" min="0" max="100" value="0" class="w-20 text-right px-2 py-1 rounded border border-slate-300 text-sm" />
+              </div>
+              <div class="flex items-center justify-between">
+                <label for="pos-tax-toggle" class="text-slate-600 flex items-center gap-2 cursor-pointer">
+                  <input id="pos-tax-toggle" type="checkbox" class="rounded text-emerald-600 focus:ring-emerald-500" />
+                  <span>Terapkan PPN 11%</span>
+                </label>
+                <span id="pos-tax-amount" class="font-medium text-slate-700">Rp 0</span>
+              </div>
+            </div>
+
+            <!-- Ringkasan Total -->
+            <div class="bg-slate-50 rounded-lg p-3 space-y-1 text-sm border border-slate-200">
+              <div class="flex justify-between text-slate-600">
+                <span>Subtotal</span>
+                <span id="pos-subtotal">Rp 0</span>
+              </div>
+              <div class="flex justify-between text-emerald-700">
+                <span>Potongan Diskon</span>
+                <span id="pos-discount-amount">- Rp 0</span>
+              </div>
+              <div class="flex justify-between font-bold text-base text-slate-900 pt-1.5 border-t border-slate-200">
+                <span>Total Tagihan</span>
+                <span id="pos-grand-total">Rp 0</span>
+              </div>
+            </div>
+
+            <!-- Metode Pembayaran -->
+            <div class="space-y-2">
+              <span class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Metode Pembayaran</span>
+              <div class="grid grid-cols-3 gap-2" id="pos-payment-methods">
+                <button type="button" data-method="Tunai" class="pay-method-btn active-pay py-2 px-2 rounded-lg border text-xs font-semibold">Tunai</button>
+                <button type="button" data-method="QRIS" class="pay-method-btn py-2 px-2 rounded-lg border text-xs font-semibold">QRIS</button>
+                <button type="button" data-method="Transfer VA" class="pay-method-btn py-2 px-2 rounded-lg border text-xs font-semibold">Transfer VA</button>
+              </div>
+            </div>
+
+            <!-- Input Uang Tunai & Kembalian -->
+            <div id="pos-cash-box" class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <label for="pos-cash-received" class="text-xs font-medium text-slate-600">Uang Diterima (Rp)</label>
+                <input id="pos-cash-received" type="number" min="0" step="500" placeholder="0" class="w-40 text-right px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-semibold" />
+              </div>
+              <div class="flex items-center justify-between text-sm bg-emerald-50 text-emerald-900 px-3 py-2 rounded-lg">
+                <span class="font-medium">Kembalian</span>
+                <span id="pos-change-display" class="font-bold">Rp 0</span>
+              </div>
+            </div>
+
+            <button id="btn-pos-checkout" type="button" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition">
+              Proses Pembayaran & Cetak Struk
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODUL 3: MINI-CMS PRODUK & STOK GUDANG (KHUSUS ADMIN)
+    ========================================================== -->
+    <section id="view-cms" class="view-section hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Form Tambah / Edit Produk -->
+        <div class="lg:col-span-4">
+          <form id="cms-form" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 id="cms-form-title" class="font-bold text-base text-slate-900">Tambah Produk Baru</h2>
+              <button id="btn-cms-reset" type="button" class="text-xs text-slate-500 hover:text-slate-800 underline">Reset</button>
+            </div>
+            <input type="hidden" id="cms-product-id" />
+
+            <div>
+              <label for="cms-sku" class="block text-xs font-semibold text-slate-700 mb-1">Kode SKU</label>
+              <input id="cms-sku" type="text" required placeholder="Contoh: SMB-009" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+            </div>
+
+            <div>
+              <label for="cms-name" class="block text-xs font-semibold text-slate-700 mb-1">Nama Produk</label>
+              <input id="cms-name" type="text" required placeholder="Contoh: Madu Hutan Kalimantan 350ml" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="cms-category" class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
+                <select id="cms-category" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white">
+                  <option value="Sembako">Sembako</option>
+                  <option value="Minuman">Minuman</option>
+                  <option value="Makanan Ringan">Makanan Ringan</option>
+                  <option value="Kebutuhan Rumah">Kebutuhan Rumah</option>
+                </select>
+              </div>
+              <div>
+                <label for="cms-stock" class="block text-xs font-semibold text-slate-700 mb-1">Stok Awal</label>
+                <input id="cms-stock" type="number" min="0" required value="10" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+              </div>
+            </div>
+
+            <div>
+              <label for="cms-price" class="block text-xs font-semibold text-slate-700 mb-1">Harga Jual (Rp)</label>
+              <input id="cms-price" type="number" min="100" step="100" required placeholder="25000" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+            </div>
+
+            <div>
+              <label for="cms-description" class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Singkat</label>
+              <textarea id="cms-description" rows="2" required placeholder="Keterangan kemasan atau keunggulan produk..." class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm transition">
+              Simpan Data Produk
+            </button>
+          </form>
+        </div>
+
+        <!-- Tabel Inventaris Produk -->
+        <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="font-bold text-base text-slate-900">Daftar Inventaris & Stok</h2>
+              <p class="text-xs text-slate-500">Perubahan stok langsung tersinkronisasi dengan Toko Online & Kasir POS.</p>
+            </div>
+            <input id="cms-search" type="text" placeholder="Filter tabel produk..." class="w-full sm:w-56 px-3 py-1.5 text-sm rounded-lg border border-slate-300" />
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 text-slate-600 text-xs uppercase border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3">SKU</th>
+                  <th class="px-4 py-3">Produk</th>
+                  <th class="px-4 py-3">Kategori</th>
+                  <th class="px-4 py-3 text-right">Harga</th>
+                  <th class="px-4 py-3 text-center">Stok</th>
+                  <th class="px-4 py-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="cms-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODUL 4: LAPORAN PENJUALAN & ANALITIK (KASIR & ADMIN)
+    ========================================================== -->
+    <section id="view-dashboard" class="view-section hidden space-y-6">
+      <!-- Kartu KPI -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase">Total Omzet Penjualan</span>
+          <p id="kpi-revenue" class="text-2xl font-extrabold text-emerald-600 mt-1">Rp 0</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase">Total Transaksi</span>
+          <p id="kpi-tx-count" class="text-2xl font-extrabold text-slate-900 mt-1">0</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase">Jumlah Produk Aktif</span>
+          <p id="kpi-sku-count" class="text-2xl font-extrabold text-slate-900 mt-1">0 SKU</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <span class="text-xs font-semibold text-slate-500 uppercase">Peringatan Stok Menipis</span>
+          <p id="kpi-low-stock" class="text-2xl font-extrabold text-amber-600 mt-1">0 Item</p>
+        </div>
+      </div>
+
+      <!-- Grafik Kategori & Riwayat Transaksi -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+          <h3 class="font-bold text-base text-slate-900">Distribusi Omzet per Kategori</h3>
+          <div id="category-chart-container" class="space-y-3"></div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-slate-200">
+            <h3 class="font-bold text-base text-slate-900">Riwayat Faktur & Transaksi</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 text-slate-600 text-xs uppercase border-b border-slate-200">
+                <tr>
+                  <th class="px-4 py-3">No. Invoice</th>
+                  <th class="px-4 py-3">Waktu</th>
+                  <th class="px-4 py-3">Kasir / Channel</th>
+                  <th class="px-4 py-3">Metode</th>
+                  <th class="px-4 py-3 text-right">Total</th>
+                  <th class="px-4 py-3 text-right">Struk</th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         MODUL 5: INSPEKTOR DATABASE & KEAMANAN (KHUSUS ADMIN)
+    ========================================================== -->
+    <section id="view-database" class="view-section hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 space-y-4">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <h2 class="font-bold text-base text-slate-900">Arsitektur Keamanan Sistem</h2>
+            <ul class="space-y-2 text-xs text-slate-600">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span><strong>RBAC (Role-Based Access Control):</strong> Pemisahan hak akses Publik, Kasir, dan Admin melalui <code>sessionStorage</code>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span><strong>Sanitasi Anti-XSS:</strong> Semua input form dan pencarian disaring menggunakan fungsi <code>escapeHTML()</code> sebelum dirender ke DOM.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-600 font-bold">✓</span>
+                <span><strong>Password Hashing:</strong> Kredensial pengguna tidak disimpan dalam bentuk teks mentah di tabel <code>users</code>.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <h3 class="font-bold text-sm text-slate-900">Pemeliharaan Database</h3>
+            <button id="btn-export-db" type="button" class="w-full py-2 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+              Download Backup Database (.json)
+            </button>
+            <button id="btn-reset-db" type="button" class="w-full py-2 px-4 rounded-lg border border-rose-300 text-rose-700 hover:bg-rose-50 text-xs font-semibold transition">
+              Reset Database ke Data Awal
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <span class="font-bold text-sm text-slate-900">Inspektor Koleksi JSON (localStorage)</span>
+            <div class="flex items-center gap-1.5" id="db-table-tabs">
+              <button type="button" data-db-table="products" class="db-tab active-db-tab px-3 py-1 rounded-md text-xs font-semibold">products</button>
+              <button type="button" data-db-table="transactions" class="db-tab px-3 py-1 rounded-md text-xs font-semibold">transactions</button>
+              <button type="button" data-db-table="users" class="db-tab px-3 py-1 rounded-md text-xs font-semibold">users</button>
+            </div>
+          </div>
+          <pre id="db-json-viewer" class="p-4 bg-slate-900 text-emerald-300 text-xs overflow-auto max-h-96 font-mono"></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <span>&copy; 2026 KarsaMart (karsamart.id) — Portofolio Sistem Informasi</span>
+      <span>Arsitektur Modular: HTML5 • CSS3 • Vanilla JS • LocalStorage DB</span>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       DRAWER KERANJANG BELANJA PEMBELI (SLIDE-OVER)
+  ========================================================== -->
+  <aside id="cart-drawer" class="fixed inset-0 z-40 hidden">
+    <div id="cart-backdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs"></div>
+    <div class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col z-50">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+        <h2 class="font-bold text-base text-slate-900">Keranjang Belanja Anda</h2>
+        <button id="btn-close-cart" type="button" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100">✕</button>
+      </div>
+
+      <div id="store-cart-items" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+      <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <input id="customer-name" type="text" placeholder="Nama Pembeli" class="px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white" />
+          <input id="customer-note" type="text" placeholder="Catatan / Alamat singkat" class="px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white" />
+        </div>
+        <div class="flex items-center justify-between font-bold text-base text-slate-900">
+          <span>Total Belanja</span>
+          <span id="store-cart-total">Rp 0</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button id="btn-checkout-online" type="button" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition">
+            Bayar Online (Simulasi)
+          </button>
+          <button id="btn-checkout-wa" type="button" class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+            Pesan via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================
+       MODAL LOGIN STAFF (ADMIN / KASIR)
+  ========================================================== -->
+  <div id="login-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-bold text-lg text-slate-900">Login Staff KarsaMart</h2>
+        <button id="btn-close-login" type="button" class="text-slate-400 hover:text-slate-700">✕</button>
+      </div>
+      <p class="text-xs text-slate-500">Masuk untuk membuka modul Kasir POS, Manajemen CMS Produk, dan Laporan.</p>
+
+      <form id="login-form" class="space-y-3">
+        <div>
+          <label for="login-username" class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
+          <input id="login-username" type="text" required class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+        </div>
+        <div>
+          <label for="login-password" class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+          <input id="login-password" type="password" required class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300" />
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm">
+          Masuk ke Sistem
+        </button>
+      </form>
+
+      <!-- Tombol Isi Cepat Akun Demo -->
+      <div class="pt-3 border-t border-slate-100 space-y-2">
+        <span class="block text-[11px] font-semibold text-slate-400 uppercase">Akun Demo Portofolio:</span>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" data-demo-user="admin" data-demo-pass="admin123" class="demo-fill-btn py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700">
+            Admin (admin123)
+          </button>
+          <button type="button" data-demo-user="kasir" data-demo-pass="kasir123" class="demo-fill-btn py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700">
+            Kasir (kasir123)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL STRUK TRANSAKSI (TERMAL PRINT READY)
+  ========================================================== -->
+  <div id="receipt-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl space-y-4">
+      <div id="receipt-print-area" class="font-mono text-xs text-slate-800 space-y-3 border border-dashed border-slate-300 p-4 rounded-lg bg-white">
+        <div class="text-center border-b border-dashed border-slate-300 pb-2">
+          <p class="font-bold text-sm">KARSAMART UMKM</p>
+          <p>karsamart.id • Mitra Belanja Lokal</p>
+        </div>
+        <div id="receipt-meta" class="space-y-0.5 text-[11px]"></div>
+        <div id="receipt-items" class="border-y border-dashed border-slate-300 py-2 space-y-1"></div>
+        <div id="receipt-totals" class="space-y-0.5 text-[11px]"></div>
+        <p class="text-center text-[11px] pt-2 border-t border-dashed border-slate-300">
+          Terima kasih telah berbelanja di KarsaMart!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 no-print">
+        <button id="btn-print-receipt" type="button" class="py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">
+          Cetak Struk
+        </button>
+        <button id="btn-close-receipt" type="button" class="py-2 px-3 rounded-lg border border-slate-300 text-slate-700 text-xs font-semibold">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI KUSTOM -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/50">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl space-y-4">
+      <h3 id="confirm-title" class="font-bold text-base text-slate-900">Konfirmasi</h3>
+      <p id="confirm-message" class="text-sm text-slate-600"></p>
+      <div class="flex justify-end gap-2">
+        <button id="btn-confirm-cancel" type="button" class="px-4 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700">Batal</button>
+        <button id="btn-confirm-ok" type="button" class="px-4 py-2 rounded-lg bg-rose-600 text-white text-xs font-semibold">Ya, Lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 max-w-xs w-full pointer-events-none"></div>
+
+  <!-- URUTAN WAJIB: DATABASE TERLEBIH DAHULU, LALU APLIKASI UTAMA -->
+  <script src="database.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
